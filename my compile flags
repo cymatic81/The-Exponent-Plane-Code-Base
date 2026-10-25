@@ -1,0 +1,8 @@
+# To build only your isolated testing binary:
+make
+
+# To build the general-form shared library for system distribution:
+make shared
+
+# To pass a custom, high-speed release override directly to the shared build:
+make shared CC=clang CFLAGS="-O3 -std=c11 -fPIC -Werror" LIB_NAME="libxplane_core"

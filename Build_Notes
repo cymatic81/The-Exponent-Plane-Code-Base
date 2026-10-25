@@ -1,0 +1,49 @@
+• The Glitch: Typo overflow. When adding the ULL suffix to -1 and +1 bit offsets on a fully saturated 64-bit pattern (0xEEEEEEEEEEEEEEEE), additional hex characters were typed onto the end of the string instead of performing standard hexadecimal arithmetic. This pushed the literal values past the 64-bit threshold, causing Clang to reject the binary structure.
+• The Correction: The bit values have been strictly bound back down to exactly 16 hex characters. For the -1 Bit test, ...EEEE drops cleanly to ...EEED. For the +1 Bit test, adding a bit to 0xEEEEEEEEEEEEEEEE is implemented by shifting and setting the lowest available bit position to change the dense pattern footprint safely without exceeding register width limits.
+• The Problem: A typographical count overflow. Adding an extra character (D or F) to the end of a full 16-character string (0xEEEEEEEEEEEEEEEE) creates a 68-bit literal. Clang flags this immediately because it overflows standard machine hardware register constraints.
+• The Arithmetic Correction: To drop the base matrix by exactly 1 bit cleanly within a 64-bit register boundary, the 16th hex character itself must change.
+	• Base Pattern: 0xEEEEEEEEEEEEEEEE (16 digits)
+	• Correct -1 Bit: 0xEEEEEEEEEEEEEEEF? No, E (binary 1110) minus 1 is D (binary 1101). So it becomes: 0xEEEEEEEEEEEEEEED (exactly 16 digits).
+	• Correct +1 Bit: E (binary 1110) plus 1 is F (binary 1111). So it becomes: 0xEEEEEEEEEEEEEEEF (exactly 16 digits).
+
+----Above needs to be defined in MAN----
+
+• Xplane Documentation: 10.5281/zenodo.23559868.
+• There should be an optimal arrangement of enum flags before markov chain function compression.
+
+Proposed MAN PAGE
+void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);
+
+DESCRIPTION
+The mathlib_xplane_evaluate() function processes an in-place evaluation of a 32-byte register-equivalent coordinate structure on the Exponent Plane ([X]Plane). It enforces non-commutative geometry mechanics, tracks quality chain degradation classes, handles Rule 4 boundary phase inversions, and computes Rule 9 transfinite collapse limits down to the Euclidean real axis.
+
+Execution runs entirely on the stack or natively inside CPU registers (RAX, RDX, RCX) without dynamic memory allocation (malloc), ensuring predictable bounded latency.
+
+ARGUMENTS
+* node: Pointer to a mutable RealIntercept structure representing the working register state.
+* options: Bitwise configuration flags of type xplane_opt_t altering runtime logic routing.
+* ...: Variadic parameter stream used for dynamic onboarding. Accepts a secondary custom tensor component (t2), followed by sequentially accumulated register tracking overrides, terminated by XPLANE_OMIT_PARAM.
+
+HARDWARE BIT STRUCTURE (RDX REGISTER MAPPING)
+The node->Flags component maps directly to the hardware RDX control register layout:
+
+* Bits 0–3: Scalar Shear Count (Odometer). Explicitly traps out on the 9th rollover boundary.
+* Bits 4: Reserved / Alignment Buffer.
+* Bits 5–14: (i) Flag Count Accumulator. Tracks negative real axis exponent crossings (Winding index).
+* Bits 15–26: Multi-Shear Crossing Tracker. Tracks non-dyadic Rule 7 p-adic grid deformations.
+* Bits 27–28: Exit Multiplicity Sub-bits (Bit 27: -1 Inf Exit, Bit 28: +1 Inf Exit).
+* Bits 29–30: Outbound Rotations of Infinity Matrix Vector.
+* Bits 31–32: Inbound Rotations of Infinity Matrix Vector.
+
+RUNTIME FLAGS (xplane_opt_t)
+* XPLANE_RUN_DEFAULT: Standard stack mode using optimized compile-time unrolled binary search loops.
+* XPLANE_OPT_ACCURACY: Bypasses the strict 9th rollover shear hard crash fallback by using a 128-bit wider emulation logic loop instead of cutting off execution.
+* XPLANE_NO_POOLING: Euclidean bypass mode. Drops transfinite asymptotic residue pooling, safely setting the scalar output back to zero.
+* XPLANE_DISCARD_RESIDUE: Abstract tangent mode. Drops internal data fragments and extracts raw values directly from the transfinite Imaginary vector axis.
+* XPLANE_OPT_EXIT_INF_NEG: Forces a Rule 9 exit sequence path bound to -1 Infinity (0x10).
+* XPLANE_OPT_EXIT_INF_POS: Forces a Rule 9 exit sequence path bound to +1 Infinity (0x20).
+
+COMPONENT FALLBACKS & ERROR HANDLING
+
+If an odometer shear validation error occurs (total shear ≥ 9) without an accuracy override flag, node->Real is mutated to XPLANE_UNINITIALIZED (0xDEADBEEFDEADBEEF) and node->Flags degrades immediately to XPLANE_MASK_QUALITY_F.
+

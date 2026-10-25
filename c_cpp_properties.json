@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Mac-Intel-i5",
+            "compilerPath": "/usr/bin/clang",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${compilerPath}"
+            ],
+            "defines": [
+                "DEBUG",
+                "__X86_64__"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}
