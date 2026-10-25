@@ -36,17 +36,6 @@ make remake
 
 ---
 
-## 🛠️ Sandbox Playground Tests
-
-A standalone quadratic factorization test suite is included inside the `playground/` directory to evaluate transfinite polynomial root distributions over the range `[-9, 9]` (skipping non-commutative structural zeroes):
-
-```bash
-# Compile and execute the quadratic sandbox test from the root directory
-clang -Wall -Wextra -O2 -std=c11 playground/quadtest.c mathlib_xplane.c -o playground/quadtest
-./playground/quadtest
-```
-
----
 
 ## 📄 Documentation
 
