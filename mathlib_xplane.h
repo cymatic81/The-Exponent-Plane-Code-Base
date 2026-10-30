@@ -28,10 +28,9 @@ extern "C" {
 #define XPLANE_EXIT_INF_NEG           0x08000000ULL  
 #define XPLANE_EXIT_INF_POS           0x10000000ULL  
 
-/*---YOU FLAG IT---YOU FREE IT!---*/
 typedef enum {
     XPLANE_RUN_DEFAULT        = 0x00, 
-    XPLANE_OPT_ACCURACY       = 0x02,  // 128bit-65bit accuracy toggle.
+    XPLANE_OPT_ACCURACY       = 0x02,  // 128bit-67bit accuracy toggle.
     XPLANE_NO_POOLING         = 0x04,  // Xplane Bypass.
     XPLANE_DISCARD_RESIDUE    = 0x08,  // Abstractly: take rhe tangent.
     XPLANE_OPT_EXIT_INF_NEG   = 0x10,  // -1 Infinity Exit
@@ -45,7 +44,6 @@ typedef struct {
     uint64_t Flags;         
 } RealIntercept;
 
-/*---YOU FLAG IT---YOU FREE IT!---*/
 void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);
 
 #ifdef __cplusplus

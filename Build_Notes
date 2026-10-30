@@ -7,9 +7,16 @@
 	• Correct +1 Bit: E (binary 1110) plus 1 is F (binary 1111). So it becomes: 0xEEEEEEEEEEEEEEEF (exactly 16 digits).
 
 ----Above needs to be defined in MAN----
+It's the dydactic shear from high bit values with log(5/3) relations or similar, 
+triggering the 9th overflow bit which in turn calls the following address from the register we hijacked.
+Even with the accuracy flag activated calling this function can occasionally [high bit value log(5/3)] 
+overflow the register, even on stack execution, (struct) bit flag tracking! Be careful how you wrap it!
 
+• No free is needed, that is a remnant from an older build, the above shear problem is the result. 
 • Xplane Documentation: 10.5281/zenodo.23559868.
 • There should be an optimal arrangement of enum flags before markov chain function compression.
+• This function will not co-operate with lean, the bit masks and bitwise comparison of the binary search operate within the exponent of a function. This will not trigger the sys calls that lean relies upon to accurately extract the desired proof function. This bitwise function could be rebuilt on the stack in such a way to trigger the correct sys calls and interface with lean. I may do this in the future.
+
 
 Proposed MAN PAGE
 void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);

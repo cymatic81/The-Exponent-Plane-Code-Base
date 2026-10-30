@@ -1,5 +1,10 @@
 # mathlib_xplane
 
+• Early implementation.
+• This function will not co-operate with lean as is. See build notes.
+
+---trimmed AI summary---
+
 An architecture-level, zero-allocation C language extension for **Mathlib.c** implementing **The Exponent Plane ($\mathbb{X}$)** for transfinite asymptotic residue pooling in non-commutative geometries. 
 
 Written entirely in pure, standard ISO C11, this subsystem executes natively on the CPU stack and inside physical machine registers (`RAX`/`RDX`), tracking dynamic quality matrices and non-dyadic grid deformations with completely bounded real-time latency.
@@ -39,9 +44,9 @@ make remake
 
 ## 📄 Documentation
 
-The complete theoretical paper outlining the fundamental axioms of the transfinite space, exact rotations of infinity, and the Exterior Ring Baffle Rule is available inside the repository as a formal preprint document:
+The complete theoretical document outlining the fundamental axioms of the transfinite space, exact rotations of infinity is available inside the repository as a formal preprint document:
 
-*   **`The_Exponent_Plane_Doc.pdf`** — Publication-grade mathematical specification sheet.
+*   **`The_Exponent_Plane_Doc.pdf`** — Mathematical specification Document.
 
 ---
 **Author:** Jesse Chapman  
