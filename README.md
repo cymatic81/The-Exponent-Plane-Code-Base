@@ -1,27 +1,14 @@
 # mathlib_xplane
 
 • Early implementation.
-• This function will not co-operate with lean as is. See build notes.
+• This function will not entirely co-operate with lean as is. See build notes.
+• RTFMP. Read the MAN page. See build notes for safe wrapping.
 
 ---trimmed AI summary---
 
 An architecture-level, zero-allocation C language extension for **Mathlib.c** implementing **The Exponent Plane ($\mathbb{X}$)** for transfinite asymptotic residue pooling in non-commutative geometries. 
 
 Written entirely in pure, standard ISO C11, this subsystem executes natively on the CPU stack and inside physical machine registers (`RAX`/`RDX`), tracking dynamic quality matrices and non-dyadic grid deformations with completely bounded real-time latency.
-
----
-
-## 🎛️ Hardware Bit Structure (RDX Register Mapping)
-
-The engine maps all control flags, quality tracking states, and transfinite multiplicities directly into a single 32-bit register footprint inside `node->Flags` to ensure predictable register rollover alignment:
-
-*   **Bits 0–3:** `Scalar Shear Count Odometer` — Tracks structural shifts. Explicitly catches and faults out on the 9th rollover.
-*   **Bit 4:** *Reserved / Internal Alignment Buffer*
-*   **Bits 5–14:** `(i) Flag Count Accumulator` — Tracks negative real axis crossings (Winding index metric).
-*   **Bits 15–26:** `Multi-Shear Crossing Tracker` — Records non-dyadic Rule 7 p-adic grid deformations.
-*   **Bits 27–28:** `Exit Multiplicity Options` — Enforces Rule 9 real axis exit options (Bit 27: -1 Infinity path, Bit 28: +1 Infinity path).
-*   **Bits 29–30:** `Outbound Rotations of Infinity` Vector Matrix.
-*   **Bits 31–32:** `Inbound Rotations of Infinity` Vector Matrix.
 
 ---
 
@@ -40,6 +27,18 @@ make remake
 ```
 
 ---
+
+## 🎛️ Hardware Bit Structure (RDX Register Mapping)
+
+The engine maps all control flags, quality tracking states, and transfinite multiplicities directly into a single 32-bit register footprint inside `node->Flags` to ensure predictable register rollover alignment:
+
+*   **Bits 0–3:** `Scalar Shear Count Odometer` — Tracks structural shifts. Explicitly catches and faults out on the 9th rollover.
+*   **Bit 4:** *Reserved / Internal Alignment Buffer*
+*   **Bits 5–14:** `(i) Flag Count Accumulator` — Tracks negative real axis crossings (Winding index metric).
+*   **Bits 15–26:** `Multi-Shear Crossing Tracker` — Records non-dyadic Rule 7 p-adic grid deformations.
+*   **Bits 27–28:** `Exit Multiplicity Options` — Enforces Rule 9 real axis exit options (Bit 27: -1 Infinity path, Bit 28: +1 Infinity path).
+*   **Bits 29–30:** `Outbound Rotations of Infinity` Vector Matrix.
+*   **Bits 31–32:** `Inbound Rotations of Infinity` Vector Matrix.---
 
 
 ## 📄 Documentation

@@ -1,21 +1,28 @@
-• The Glitch: Typo overflow. When adding the ULL suffix to -1 and +1 bit offsets on a fully saturated 64-bit pattern (0xEEEEEEEEEEEEEEEE), additional hex characters were typed onto the end of the string instead of performing standard hexadecimal arithmetic. This pushed the literal values past the 64-bit threshold, causing Clang to reject the binary structure.
-• The Correction: The bit values have been strictly bound back down to exactly 16 hex characters. For the -1 Bit test, ...EEEE drops cleanly to ...EEED. For the +1 Bit test, adding a bit to 0xEEEEEEEEEEEEEEEE is implemented by shifting and setting the lowest available bit position to change the dense pattern footprint safely without exceeding register width limits.
-• The Problem: A typographical count overflow. Adding an extra character (D or F) to the end of a full 16-character string (0xEEEEEEEEEEEEEEEE) creates a 68-bit literal. Clang flags this immediately because it overflows standard machine hardware register constraints.
-• The Arithmetic Correction: To drop the base matrix by exactly 1 bit cleanly within a 64-bit register boundary, the 16th hex character itself must change.
-	• Base Pattern: 0xEEEEEEEEEEEEEEEE (16 digits)
-	• Correct -1 Bit: 0xEEEEEEEEEEEEEEEF? No, E (binary 1110) minus 1 is D (binary 1101). So it becomes: 0xEEEEEEEEEEEEEEED (exactly 16 digits).
-	• Correct +1 Bit: E (binary 1110) plus 1 is F (binary 1111). So it becomes: 0xEEEEEEEEEEEEEEEF (exactly 16 digits).
+Please send feedback, so I can improve this page and we can wrap the function safely, thank you.
 
-----Above needs to be defined in MAN----
-It's the dydactic shear from high bit values with log(5/3) relations or similar, 
-triggering the 9th overflow bit which in turn calls the following address from the register we hijacked.
-Even with the accuracy flag activated calling this function can occasionally [high bit value log(5/3)] 
+----Needs to be defined in MAN----
+• The dydactic shear from high bit values with log(5/3) relations or similar, triggering the 9th overflow 
+bit which in turn calls the following address from the register we hijacked. Put the accuracy flag cut 
+off check lower? 
+• Even with the accuracy flag activated calling this function can occasionally [high bit value log(5/3)] 
 overflow the register, even on stack execution, (struct) bit flag tracking! Be careful how you wrap it!
 
+• The function will sys error out if it receives more than 64 bits, when expecting only 64 bits.
+• to counter log (a/b) shear for nondydactic roots of a and b, I would recommend 1 bit for roll over + 1bit 
+for safety + a + b bits less than width. Ie. 64-1-1-a-b bits(where a,b non dyadic roots) for your parsed data.
+(?2nd value only or split between 2 variables?)
 • No free is needed, that is a remnant from an older build, the above shear problem is the result. 
 • Xplane Documentation: 10.5281/zenodo.23559868.
-• There should be an optimal arrangement of enum flags before markov chain function compression.
-• This function will not co-operate with lean, the bit masks and bitwise comparison of the binary search operate within the exponent of a function. This will not trigger the sys calls that lean relies upon to accurately extract the desired proof function. This bitwise function could be rebuilt on the stack in such a way to trigger the correct sys calls and interface with lean. I may do this in the future.
+• There should be an optimal arrangement of enum flags before Markov chain function compression.
+• NO FLOATING POINTS! The symplectic area will NOT be exact if you give this function floating points (see 
+rule 3 rotations of infinity.) If u must use floats, (approximations are not solves) declare a uint_64 and 
+type def it? Maybe you have to bitwise the float there, and bitwise it back after...lean should catch up here.
+• This function will not co-operate with lean, the bit masks and bitwise comparison of the binary search 
+operate within the exponent of a function. This will not trigger the sys calls that lean relies upon to 
+accurately extract the desired proof function. This bitwise function could be rebuilt on the stack in 
+such a way to trigger the correct sys calls and interface with lean. I may do this in the future. 
+Small values with little or no dydactic shear should still work with lean, pls report success rate as 
+it would be helpful for a stack rebuild.
 
 
 Proposed MAN PAGE
