@@ -32,7 +32,7 @@ typedef enum {
     XPLANE_RUN_DEFAULT        = 0x00, 
     XPLANE_OPT_ACCURACY       = 0x02,  // 128bit-67bit accuracy toggle.
     XPLANE_NO_POOLING         = 0x04,  // Xplane Bypass.
-    XPLANE_DISCARD_RESIDUE    = 0x08,  // Abstractly: take rhe tangent.
+    XPLANE_DISCARD_RESIDUE    = 0x08,  // Abstractly: take the tangent.
     XPLANE_OPT_EXIT_INF_NEG   = 0x10,  // -1 Infinity Exit
     XPLANE_OPT_EXIT_INF_POS   = 0x20   // +1 Infinity Exit
 } xplane_opt_t;

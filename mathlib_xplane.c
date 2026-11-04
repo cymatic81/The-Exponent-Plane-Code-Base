@@ -68,7 +68,7 @@ void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...) {
         t2 = ~t2;
     }
 
-    /* 6. UNROLLED MACHINE CODE BINARY SEARCH PASS */
+    /* 6. UNROLLED BINARY EVAL SWEEP */
     uint64_t low = 0ULL, high = 0xFFFFFFFFFFFFFFFFULL, mid = 0ULL;
     for (int i = 0; i < 64; i++) {
         mid = low + ((high - low) >> 1);

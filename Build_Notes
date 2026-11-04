@@ -9,9 +9,9 @@ overflow the register, even on stack execution, (struct) bit flag tracking! Be c
 
 • The function will sys error out if it receives more than 64 bits, when expecting only 64 bits.
 • to counter log (a/b) shear for nondydactic roots of a and b, I would recommend 1 bit for roll over + 1bit 
-for safety + a + b bits less than width. Ie. 64-1-1-a-b bits(where a,b non dyadic roots) for your parsed data.
+for safety + a + b bits less than width. Ie. 64-1-1-a-b bits(where a,b do not have dyadic roots) for your parsed data.
 (?2nd value only or split between 2 variables?)
-• No free is needed, that is a remnant from an older build, the above shear problem is the result. 
+• No free is needed, that is a remnant from an older build. 
 • Xplane Documentation: 10.5281/zenodo.23559868.
 • There should be an optimal arrangement of enum flags before Markov chain function compression.
 • NO FLOATING POINTS! The symplectic area will NOT be exact if you give this function floating points (see 
