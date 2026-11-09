@@ -1,10 +1,45 @@
 Please send feedback, so I can improve this page and we can wrap the function safely, thank you.
 
-lean freindly wrappers.... I hope, pls send feed back.
+<<<Saftey Wrapper>>>
 
-abitary 3 bit X2 [up tolog(7/5)]shear window implemented...
+abitary 3 bit X2 [up tolog(7/5)]shear window implemented, prime roots to 7 is a lot of shear protect, 
+but a small percent of near full bit (64bits and few 0s) values will still shear and not evaluate correctly
 
-busy, pushing now will get back for clean up
+<<<Lean Wrappers>>>
+
+I don't write Lean or Python. Use a choke point and/or tail call on the inner "mathlib_xplane_evaluate" 
+function. And the wrappers should work
+
+After digging into to there are a few problems I cant ovecome with C11. Lean fights for REX space,
+and then aggressivly inlines past bit masks. you will have to stop this with lean from your end.
+
+<<<Float Wrapper>>>
+Initially looks good, but i need to dig deeper here, maybey instruction sets.........
+
+
+Below is suggested by AI  
+
+@[extern inline "your_c11_register_read_symbol((#1) | 0x02)"]
+opaque c11RegisterReadWithRexX (rawReg : UInt64) : IO UInt64
+@[noinline]
+def preserveRegisterState (x : UInt64) : UInt64 := x
+def hardwareWrapper (safeReg : Fin 8) : IO UInt64 := do
+-- 1. Lean reads the clean register read safely
+let cleanIdx : UInt64 := UInt64.ofNat safeReg.val
+-- CHOKE POINT: Forces code generator to emit an isolated code block
+-- It cannot collapse this value or look past it to optimize the REX layout
+let forcedState := preserveRegisterState cleanIdx
+-- 2. Call the inline-mapped extern function.
+-- Lean's compiler only sees 'forcedState' being passed to a black box.
+-- The '| 0x02' happens purely inside the native C compiler layer.
+let result ← c11RegisterReadWithRexX forcedState
+-- FORCE STACK FRAME RETENTION:
+-- Dummy operation on the result AFTER the call prevents a tail-call 'jmp'.
+-- It forces the compiler to keep the local stack layout and registers intact.
+return result + 0
+
+
+<<<Central function build>>>
 
 ----Needs to be defined in MAN----
 • The dydactic shear from high bit values with log(5/3) relations or similar, triggering the 9th overflow 
@@ -122,10 +157,7 @@ DESCRIPTION
      quantisation from IEEE 754 64-bit floating-point variables (double) to 
      unsigned 64-bit plane integers (uint64_t).
 
-     Natively, passing floating-point values directly to the core engine splits 
-     the exact symplectic area calculation and breaks Rule 3 rotations of 
-     infinity. To bypass this restriction, mathlib_xplane_eval_float64() 
-     intercepts raw double parameters directly from hardware XMM registers 
+     Natively, passing floating-point values directly to the hardware XMM registers 
      (XMM0 and XMM1, per System V AMD64 ABI convention). It copies their raw bit 
      vectors straight into node->Real and node->Imaginary using zero-overhead 
      __builtin_memcpy register moves. No destructive type-casting, fractional 

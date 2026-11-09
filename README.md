@@ -2,15 +2,23 @@
 
 • Early implementation.
 
-• Two lean friendly wrappers... i hope, and a float wrapper, send feed back pls
+• Two lean friendly wrappers... check build Notes. i hope, and a float wrapper, send feed back pls
 
-• RTFMP. Read the MAN page. See build notes for safe wrapping.
+• RTFMP. Read the MAN page. See build notes.
 
 ---trimmed AI summary---
 
+void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...)
+
 An architecture-level, zero-allocation C language extension for **Mathlib.c** implementing **The Exponent Plane ($\mathbb{X}$)** for transfinite asymptotic residue pooling in non-commutative geometries. 
 
-Written entirely in pure, standard ISO C11, this subsystem executes natively on the CPU stack and inside physical machine registers (`RAX`/`RDX`), tracking dynamic quality matrices and non-dyadic grid deformations with completely bounded real-time latency.
+Lean Wrappers (check Build Notes, use choke point and/or tail call)
+
+void mathlib_xplane_eval_lean(RealIntercept* node, xplane_opt_t options, ...)
+
+void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...)
+
+Written entirely in pure, standard ISO C11, this subsystem executes natively on the CPU stack, the core function utilises machine registers (`RAX`/`RDX`), tracking dynamic quality matrices and non-dyadic grid deformations with completely bounded real-time latency.
 
 ---
 

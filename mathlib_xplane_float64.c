@@ -6,7 +6,7 @@ void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...)
     if (!node) return;
 
     /* HARD ODOMETER GATE: Mirror core engine bypass flags logic exactly */
-    uint64_t initial_shear = node->Flags & XPLANE_MASK_SHEAR_COUNT;
+    uint64_t initial_shear = node->Flags & XPLANE_MASK_SHEAR_COUNT;    //whats going on here AI? seems unnessecary...
     if (initial_shear >= 9) {
         if (!(options & XPLANE_OPT_ACCURACY)) {
             fprintf(stderr, "xplane_eval shear too high\n");
