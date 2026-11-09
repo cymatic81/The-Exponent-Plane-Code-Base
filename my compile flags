@@ -1,8 +1,8 @@
-# To build only your isolated testing binary:
+# To compile all three independent object files and link the isolated validation binary:
 make
 
-# To build the general-form shared library for system distribution:
+# To build the general-form shared library exporting all 3 public core functions:
 make shared
 
-# To pass a custom, high-speed release override directly to the shared build:
-make shared CC=clang CFLAGS="-O3 -std=c11 -fPIC -Werror" LIB_NAME="libxplane_core"
+# To pass a custom, high-speed release override with aggressive loop-unrolling and error traps:
+make shared CC=clang CFLAGS="-O3 -std=c11 -fPIC -Werror -march=native" LIB_NAME="libxplane_core"

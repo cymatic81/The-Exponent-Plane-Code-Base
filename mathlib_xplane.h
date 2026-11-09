@@ -44,7 +44,12 @@ typedef struct {
     uint64_t Flags;         
 } RealIntercept;
 
-void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);
+void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...); 
+
+/* --- New 64bit Float-to-UInt Quantisation Wrapper --- */
+void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...); //64bit float converter lean friendly
+
+void mathlib_xplane_eval_lean(RealIntercept* node, xplane_opt_t options, ...); //Shear catcher lean friendy
 
 #ifdef __cplusplus
 }

@@ -69,7 +69,7 @@ static const XPlaneTestCase XPLANE_TEST_SUITE[] = {
     /* --- Core Engine Stress & Phase Triggers --- */
     { "Rule 4 Phase Inversion Trigger (Winding Bit 5 Set to 1)", 0x5555555555555555ULL, 0ULL, (1ULL << 5), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
     { "Stress 1: Shear Odometer Trap (Shear=9, No Accuracy Flag)", 0x123456789ABCDEFULL, 0ULL, 9ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
-    { "Stress 2: Shear Odometer Pass (Shear=9, With Accuracy Bit)", 0x123456789ABCDEFULL, 0ULL, 9ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL }, /* Accuracy applied via option */
+    { "Stress 2: Shear Odometer Pass (Shear=9, With Accuracy Bit)", 0x123456789ABCDEFULL, 0ULL, 9ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL }, 
     { "Stress 3: Multi-Winding Phase Overlap (Winding Bit Odd/Even Mixed)", 0xAAAAAAAAAAAAAAAAULL, 0ULL, (3ULL << 5), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
     { "Stress 4: Exact Saturated Sub-Dyadic Limit - 1", 0xFFFFFFFFFFFFFFFEULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
     { "Stress 5: Exact Saturated Sub-Dyadic Limit (All Bits High)", 0xFFFFFFFFFFFFFFFFULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
@@ -82,9 +82,26 @@ static const XPlaneTestCase XPLANE_TEST_SUITE[] = {
     /* --- Rule 7 Multi-Shear Sequential Cascades --- */
     { "Rule 7 Operation Shear Check (Below Roll-Over Limit)", 0x1111ULL, 0ULL, (2ULL << 15), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
     { "Rule 7 Operation Shear Fault (Shear Odometer Over 9)", 0x1111ULL, 0ULL, (10ULL << 15), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
-    { "Rule 7 Operation Shear Fault Bypassed (With Accuracy Flag)", 0x1111ULL, 0ULL, (10ULL << 15), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL }
+    { "Rule 7 Operation Shear Fault Bypassed (With Accuracy Flag)", 0x1111ULL, 0ULL, (10ULL << 15), 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+
+    /* --- Lean Wrapper Safety Top-Bit Verification Vectors --- */
+    { "Lean Safety Check: 1-Value Safe Boundary (Top 6 Bits Clear)", 0x03FFFFFFFFFFFFFFULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Lean Safety Check: 1-Value Reject Boundary (Bit 63 High)",     0x8000000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Lean Safety Check: 1-Value Reject Boundary (Bit 58 High)",     0x0400000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Lean Safety Check: 2-Value Safe Boundary (Top 3 Bits Clear)", 0x1FFFFFFFFFFFFFFFULL, 0ULL, 0ULL, 0x1FFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Lean Safety Check: 2-Value Reject Boundary (T1 Bit 62 High)",  0x4000000000000000ULL, 0ULL, 0ULL, 0x0000000000000001ULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Lean Safety Check: 2-Value Reject Boundary (T2 Bit 61 High)",  0x0000000000000001ULL, 0ULL, 0ULL, 0x2000000000000000ULL, 0xFFFFFFFFFFFFFFFFULL },
+
+    /* --- NEW UNBROKEN 64-BIT FLOAT EXPLICIT TEST SUITE --- */
+    { "Float64 Pure Vector: +1.0 Positive Identity Unit",             0x3FF0000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: -1.0 Negative Phase Unity",              0xBFF0000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: Pi Transfinite Transcendental",           0x400921FB54442D18ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: Euler Asymptotic Continuum",             0x4005BF0A8B145769ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: Safe Fractional Boundary (+0.125)",       0x3FC0000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: Sub-normal Precision Edge Case",          0x0000000000000001ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 Pure Vector: Dual Float Mapping Verification",         0x4000000000000000ULL, 0ULL, 0ULL, 0x4008000000000000ULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 High Bit Reject: Single Value Breach (Bit 63 High)",   0x8000000000000000ULL, 0ULL, 0ULL, 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL },
+    { "Float64 High Bit Reject: Dual Value T2 Breach (Bit 61 High)",  0x3FF0000000000000ULL, 0ULL, 0ULL, 0x2000000000000000ULL, 0xFFFFFFFFFFFFFFFFULL }
 };
-
 #define XPLANE_TEST_COUNT (sizeof(XPLANE_TEST_SUITE) / sizeof(XPLANE_TEST_SUITE[0]))
-
 #endif /* TEST_INPUTS_H */

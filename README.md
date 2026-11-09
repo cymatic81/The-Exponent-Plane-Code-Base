@@ -1,7 +1,9 @@
 # mathlib_xplane
 
 • Early implementation.
-• This function will not entirely co-operate with lean as is. See build notes.
+
+• Two lean friendly wrappers... i hope, and a float wrapper, send feed back pls
+
 • RTFMP. Read the MAN page. See build notes for safe wrapping.
 
 ---trimmed AI summary---

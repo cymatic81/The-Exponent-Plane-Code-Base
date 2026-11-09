@@ -1,5 +1,11 @@
 Please send feedback, so I can improve this page and we can wrap the function safely, thank you.
 
+lean freindly wrappers.... I hope, pls send feed back.
+
+abitary 3 bit X2 [up tolog(7/5)]shear window implemented...
+
+busy, pushing now will get back for clean up
+
 ----Needs to be defined in MAN----
 • The dydactic shear from high bit values with log(5/3) relations or similar, triggering the 9th overflow 
 bit which in turn calls the following address from the register we hijacked. Put the accuracy flag cut 
@@ -61,3 +67,109 @@ COMPONENT FALLBACKS & ERROR HANDLING
 
 If an odometer shear validation error occurs (total shear ≥ 9) without an accuracy override flag, node->Real is mutated to XPLANE_UNINITIALIZED (0xDEADBEEFDEADBEEF) and node->Flags degrades immediately to XPLANE_MASK_QUALITY_F.
 
+<<<<<<<<<New Funcs AI MAN (not checked)>>>>>>>>>
+
+MATHLIB_XPLANE_EXT(3)    Library Functions Manual    MATHLIB_XPLANE_EXT(3)
+
+NAME
+     mathlib_xplane_eval_lean, mathlib_xplane_eval_float64 – Safety and 
+     floating-point evaluation extensions for the Exponent Plane
+
+SYNOPSIS
+     #include "mathlib_xplane.h"
+
+     void
+     mathlib_xplane_eval_lean(RealIntercept *node, xplane_opt_t options, ...);
+
+     void
+     mathlib_xplane_eval_float64(RealIntercept *node, xplane_opt_t options, ...);
+
+DESCRIPTION
+     The mathlib_xplane_eval_lean() and mathlib_xplane_eval_float64() functions 
+     serve as hardened, specialized wrappers for the core mathlib_xplane_evaluate() 
+     engine. They safeguard stack layout geometry against non-dyadic register 
+     deformations, manage System V AMD64 ABI calling boundaries, and preserve 
+     topological proof traces for deployment verification.
+
+   The Lean Safety Wrapper
+     The mathlib_xplane_eval_lean() function acts as a defensive gate against 
+     didactic and non-dyadic register overflow shear. Complex numbers with non-
+     dyadic roots (such as log(5/3) or other transfinite structures) can deform 
+     the internal discrete search grid, triggering the 9th odometer overflow or 
+     corrupting stack execution frames before core engine safety bounds activate.
+
+     To eliminate high-bit register hijacking risks, this function processes 
+     data loading and enforces an arbitrary top-bit protection validation gate:
+           • For 1 parsed value (node->Real): The top 6 bits must be clean.
+             (Mask: 0xFC00000000000000)
+           • For 2 parsed values (node->Real and custom_t2): The top 3 bits of 
+             each parameter must be clean. (Mask: 0xE000000000000000)
+
+     If any prohibited top bits are active, or if the input hardware odometer 
+     shear count is already degraded (initial shear >= 9), the function writes 
+     the error string "xplane_eval shear too high\n" to stderr, mutates node->Real 
+     to XPLANE_UNINITIALIZED (0xDEADBEEFDEADBEEF), sets node->Flags to 
+     XPLANE_MASK_QUALITY_F (0x8000000000000000), and exits immediately.
+
+     To support Lean proof extraction, this function always forces the 
+     XPLANE_OPT_ACCURACY emulation bit override. It targets REX register bit 1 
+     by executing a native inline assembly instruction using the r8 register. 
+     This forces a verifiable system-level footprint on the stack that Lean 
+     verification engines can intercept and parse cleanly.
+
+   The Bitwise Float64 Wrapper
+     The mathlib_xplane_eval_float64() function handles pure bitwise 
+     quantisation from IEEE 754 64-bit floating-point variables (double) to 
+     unsigned 64-bit plane integers (uint64_t).
+
+     Natively, passing floating-point values directly to the core engine splits 
+     the exact symplectic area calculation and breaks Rule 3 rotations of 
+     infinity. To bypass this restriction, mathlib_xplane_eval_float64() 
+     intercepts raw double parameters directly from hardware XMM registers 
+     (XMM0 and XMM1, per System V AMD64 ABI convention). It copies their raw bit 
+     vectors straight into node->Real and node->Imaginary using zero-overhead 
+     __builtin_memcpy register moves. No destructive type-casting, fractional 
+     scaling, or rounding is applied.
+
+     The function tracks the hardware odometer gate and mirrors core engine rules 
+     exactly. If the initial shear count is >= 9 and XPLANE_OPT_ACCURACY is 
+     inactive, it writes "xplane_eval shear too high\n" to stderr, marks the 
+     node as uninitialised, and halts. If accuracy emulation is active, it 
+     bypasses the odometer failure loop and cleanly forwards execution down 
+     the pipeline.
+
+ARGUMENTS
+     node       Pointer to a mutable RealIntercept structure representing the 
+                active coordinate register state.
+
+     options    Bitwise runtime configuration routing flags (xplane_opt_t).
+
+     ...        Variadic argument stream. 
+                For mathlib_xplane_eval_lean(), accepts a secondary custom tensor 
+                register (custom_t2), followed by a sequential tracking override 
+                parameter, terminated by XPLANE_OMIT_PARAM. If the parameter length 
+                exceeds system limitations, the function triggers an immediate 
+                high-shear stderr rejection.
+                For mathlib_xplane_eval_float64(), accepts a literal 64-bit double 
+                for the real parameter, a literal 64-bit double for the imaginary 
+                parameter, and an optional trailing integer tensor register, 
+                terminated by XPLANE_OMIT_PARAM.
+
+RETURN VALUES
+     Functions do not return a value. All structural transformations, register 
+     rollovers, error mutations, and transfinite axis updates are performed 
+     in-place directly inside the node structure.
+
+DIAGNOSTICS
+     The functions print the following message to standard error if an invalid 
+     or dangerous register shear state is captured at entry:
+
+           xplane_eval shear too high
+
+SEE ALSO
+     mathlib_xplane_evaluate(3)
+
+     ExponentPlane Architectural Specification, Zenodo Identifier: 
+     10.5281/zenodo.23559868.
+
+Mathlib Extensions             November 10, 2026           Mathlib Extensions
