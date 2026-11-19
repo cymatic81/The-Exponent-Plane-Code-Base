@@ -1,0 +1,62 @@
+could you please run this on native ARM hardware and push the results back to me
+
+## ARM64 (AArch64) Truncation Audit — Build & Execution Guide
+
+### 1. Build & Install the Core Shared Library (Project Root)
+Run from the project root directory to compile the core engine and both wrappers for ARM64 and install `libmathlib_xplane` to `/usr/local`:
+
+```bash
+# Clean and install the shared library + header (native ARM64 Mac or Linux AArch64)
+make install
+
+# Verify all 3 ARM64 symbols are exported ('T')
+nm -gU /usr/local/lib/libmathlib_xplane.*
+```
+
+*(Note: If cross-compiling on an x86 Mac targeting Apple Silicon `arm64`, pass `EXTRA_CFLAGS="-arch arm64"` to `make install`.)*
+
+---
+
+### 2. Compile the Subfolder Truncation Harness (`LSBmain`)
+Step into this subfolder and build the debuggable executable linked against the local installed library:
+
+```bash
+# Native ARM64 (Apple Silicon / Linux AArch64)
+clang -std=c11 -O0 -g3 -fno-omit-frame-pointer -Wall -Wextra \
+    -I/usr/local/include -L/usr/local/lib \
+    LSBmain.c -lmathlib_xplane -o LSBmain_arm64
+
+# --- OR: Cross-Compile for ARM64 from x86_64 Mac ---
+clang -arch arm64 -std=c11 -O0 -g3 -fno-omit-frame-pointer -Wall -Wextra \
+    -I/usr/local/include -L/usr/local/lib \
+    LSBmain.c -lmathlib_xplane -o LSBmain_arm64
+```
+
+---
+
+### 3. Run the Executable & Generate `truncation_audit.txt`
+
+```bash
+./LSBmain_arm64
+```
+
+*(If running on an x86_64 host via QEMU user-mode emulation instead of native ARM64 hardware:)*
+```bash
+qemu-aarch64 -L /usr/aarch64-linux-gnu ./LSBmain_arm64
+```
+
+---
+
+### 4. Verification & Git Push Checklist
+
+- [ ] **Compile & install library:** `make install` in project root succeeds with zero warnings.
+- [ ] **Verify exported symbols:** `nm -gU /usr/local/lib/libmathlib_xplane.*` lists `_mathlib_xplane_evaluate`, `_mathlib_xplane_eval_float64`, and `_mathlib_xplane_eval_lean`.
+- [ ] **Compile ARM64 test harness:** `LSBmain_arm64` builds cleanly with `-O0 -g3`.
+- [ ] **Generate audit file:** Run `./LSBmain_arm64` and confirm `truncation_audit.txt` is created with `>1-LSB TRUNCATIONS : 0`.
+- [ ] **Stage & push results to Git:**
+
+```bash
+git add LSBmain.c truncation_audit.txt README.md
+git commit -m "Add ARM64 LSB truncation audit harness and test results"
+git push
+```

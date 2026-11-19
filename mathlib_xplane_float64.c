@@ -1,20 +1,13 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* File: mathlib_xplane_float64.c		Author: Chapman		Created: 2026-11-19																		*/
+/* License: Copyright (CC BY-NC) Attribution-NonCommercial-ShareAlike 4.0 International. See README	  							*/
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include "mathlib_xplane.h"
 #include <stdarg.h>
 #include <stdio.h>
 
-void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...) {
-    if (!node) return;
-
-    /* HARD ODOMETER GATE: Mirror core engine bypass flags logic exactly */
-    uint64_t initial_shear = node->Flags & XPLANE_MASK_SHEAR_COUNT;    //whats going on here AI? seems unnessecary...
-    if (initial_shear >= 9) {
-        if (!(options & XPLANE_OPT_ACCURACY)) {
-            fprintf(stderr, "xplane_eval shear too high\n");
-            node->Real  = XPLANE_UNINITIALIZED;
-            node->Flags = XPLANE_MASK_QUALITY_F;
-            return;
-        }
-    }
+    REX_ABI_WRAPPER_LOCK void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...) {
+    if (!node) return;  // Internal locked core, wrapper no inline read friendly
 
     va_list args;
     va_start(args, options);

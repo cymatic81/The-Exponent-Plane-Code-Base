@@ -1,29 +1,24 @@
 Please send feedback, so I can improve this page and we can wrap the function safely, thank you.
 
-<<<Saftey Wrapper>>>
-
-abitary 3 bit X2 [up tolog(7/5)]shear window implemented, prime roots to 7 is a lot of shear protect, 
-but a small percent of near full bit (64bits and few 0s) values will still shear and not evaluate correctly
-
 <<<Lean Wrappers>>>
 
-I don't write Lean or Python. Use a choke point and/or tail call on the inner "mathlib_xplane_evaluate" 
-function. And the wrappers should work
+REX_ABI_INNER_LOCK  and  REX_ABI_WRAPPER_LOCK (from mathlib_xplane.h)
+mathlib_xplane_evaluate REX locked
+wrappers NO inline only, dont use flag -flto (Link-Time Optimization)
+Tail call may still be needed.
 
-After digging into to there are a few problems I cant ovecome with C11. Lean fights for REX space,
-and then aggressivly inlines past bit masks. you will have to stop this with lean from your end.
+<<<Saftey Wrapper>>>
+
+Shear is covered, LSB truncation veryrare or not at all...
 
 <<<Float Wrapper>>>
-Initially looks good, but i need to dig deeper here, maybey instruction sets.........
 
+Initially looks good. But LSB truncation, chip specific.....PLEASE RUN TEST!
+
+<<<PLEASE RUN ARM CHIPSET LSB TRUNCATION TEST PROVIDED AND PUSH THE RESULT>>>
 
 Below is suggested by AI  
 
-@[extern inline "your_c11_register_read_symbol((#1) | 0x02)"]
-opaque c11RegisterReadWithRexX (rawReg : UInt64) : IO UInt64
-@[noinline]
-def preserveRegisterState (x : UInt64) : UInt64 := x
-def hardwareWrapper (safeReg : Fin 8) : IO UInt64 := do
 -- 1. Lean reads the clean register read safely
 let cleanIdx : UInt64 := UInt64.ofNat safeReg.val
 -- CHOKE POINT: Forces code generator to emit an isolated code block
@@ -37,7 +32,6 @@ let result ← c11RegisterReadWithRexX forcedState
 -- Dummy operation on the result AFTER the call prevents a tail-call 'jmp'.
 -- It forces the compiler to keep the local stack layout and registers intact.
 return result + 0
-
 
 <<<Central function build>>>
 
@@ -67,7 +61,7 @@ it would be helpful for a stack rebuild.
 
 
 Proposed MAN PAGE
-void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);
+REX_ABI_INNER_LOCK void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...);
 
 DESCRIPTION
 The mathlib_xplane_evaluate() function processes an in-place evaluation of a 32-byte register-equivalent coordinate structure on the Exponent Plane ([X]Plane). It enforces non-commutative geometry mechanics, tracks quality chain degradation classes, handles Rule 4 boundary phase inversions, and computes Rule 9 transfinite collapse limits down to the Euclidean real axis.
@@ -113,10 +107,10 @@ NAME
 SYNOPSIS
      #include "mathlib_xplane.h"
 
-     void
+     REX_ABI_WRAPPER_LOCK void
      mathlib_xplane_eval_lean(RealIntercept *node, xplane_opt_t options, ...);
 
-     void
+     REX_ABI_WRAPPER_LOCK void
      mathlib_xplane_eval_float64(RealIntercept *node, xplane_opt_t options, ...);
 
 DESCRIPTION

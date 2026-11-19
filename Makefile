@@ -30,9 +30,11 @@ LEAN_SRC      := mathlib_xplane_lean.c
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-    SHARED_EXT := dylib
+    SHARED_EXT   := dylib
+    SHARED_FLAGS := -dynamiclib -Wl,-install_name,$(LIB_DEST)/$(LIB_NAME).$(SHARED_EXT)
 else
-    SHARED_EXT := so
+    SHARED_EXT   := so
+    SHARED_FLAGS := -shared
 endif
 
 SHARED_LIB    := $(LIB_NAME).$(SHARED_EXT)
@@ -63,27 +65,27 @@ $(BUILD_DIR)/main.o: main.c
 # Object 1: Original Core Evaluation Subsystem
 $(BUILD_DIR)/mathlib_xplane.o: $(CORE_SRC) $(HEADER_NAME)
 	@$(MKDIR) $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
 # Object 2: Bitwise Floating Point Quantiser Wrapper
 $(BUILD_DIR)/mathlib_xplane_float64.o: $(FLOAT_SRC) $(HEADER_NAME)
 	@$(MKDIR) $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
 # Object 3: Lean Safety Compliance Wrapper
 $(BUILD_DIR)/mathlib_xplane_lean.o: $(LEAN_SRC) $(HEADER_NAME)
 	@$(MKDIR) $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
 shared: $(SHARED_TARGET)
 
-# Consolidated shared object library target compiled directly from root source files
-$(SHARED_TARGET): $(CORE_SRC) $(FLOAT_SRC) $(LEAN_SRC) $(HEADER_NAME)
+# Consolidated shared object library target linked directly from the 3 PIC wrapper/core objects
+$(SHARED_TARGET): $(ALL_THREE_OBJS)
 	@$(MKDIR) $(BUILD_DIR)
-	$(CC) $(CFLAGS) -fPIC -shared $(CORE_SRC) $(FLOAT_SRC) $(LEAN_SRC) -o $(SHARED_TARGET)
+	$(CC) $(CFLAGS) $(SHARED_FLAGS) $(ALL_THREE_OBJS) -o $(SHARED_TARGET)
 	@echo "Shared library target generated successfully: $(SHARED_TARGET)"
 
-install: shared
+install: clean shared
 	@$(MKDIR) $(INCLUDE_DEST)
 	@$(MKDIR) $(LIB_DEST)
 	$(CP) $(HEADER_NAME) $(INCLUDE_DEST)/$(HEADER_NAME)

@@ -1,3 +1,7 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* File: mathlib_xplane.h		Author: Chapman		Created: 2026-11-19																		*/
+/* License: Copyright (CC BY-NC) Attribution-NonCommercial-ShareAlike 4.0 International. See README	  							*/
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #ifndef MATHLIB_XPLANE_H
 #define MATHLIB_XPLANE_H
 
@@ -6,6 +10,28 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+
+/* 1. INNER CORE LOCK: Complete IPA/inlining lockout; prevents Lean REX fights */
+#if defined(__GNUC__) && !defined(__clang__)
+  #define REX_ABI_INNER_LOCK   __attribute__((noinline, noclone, noipa, optimize("no-toplevel-reorder")))
+#elif defined(__clang__)
+  #define REX_ABI_INNER_LOCK   __attribute__((noinline))
+#else
+  #define REX_ABI_INNER_LOCK
+#endif
+
+/* 2. WRAPPER LOCK: Prevents wrapper inlining, allowing register reads. */
+#if defined(__GNUC__) && !defined(__clang__)
+  #define REX_ABI_WRAPPER_LOCK __attribute__((noinline, noclone, noipa))
+  #define REX_READ_FENCE()     __asm__ __volatile__("" ::: "memory")
+#elif defined(__clang__)
+  #define REX_ABI_WRAPPER_LOCK __attribute__((noinline))
+  #define REX_READ_FENCE()     __asm__ __volatile__("" ::: "memory")
+#else
+  #define REX_ABI_WRAPPER_LOCK
+  #define REX_READ_FENCE()     ((void)0)
+#endif
+
 
 #define XPLANE_UNINITIALIZED        0xDEADBEEFDEADBEEFULL
 #define XPLANE_INF                  0x7FFFFFFFFFFFFFFFULL
@@ -44,9 +70,8 @@ typedef struct {
     uint64_t Flags;         
 } RealIntercept;
 
-void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...); 
+REX_ABI_INNER_LOCK void mathlib_xplane_evaluate(RealIntercept* node, xplane_opt_t options, ...); //raw C11, take care with your data!
 
-/* --- New 64bit Float-to-UInt Quantisation Wrapper --- */
 void mathlib_xplane_eval_float64(RealIntercept* node, xplane_opt_t options, ...); //64bit float converter lean friendly
 
 void mathlib_xplane_eval_lean(RealIntercept* node, xplane_opt_t options, ...); //Shear catcher lean friendy
