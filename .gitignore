@@ -1,0 +1,11 @@
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
+
+# Build artifacts & compiled test binaries
+build/
+*.o
+*.dylib
+*.so
+LSBmain_x86
+LSBmain_arm64

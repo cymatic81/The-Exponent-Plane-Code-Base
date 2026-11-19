@@ -1,4 +1,6 @@
 # mathlib_xplane. Copyright (CC BY-NC) 2026 Jesse Chapman
+When international AI labs give appropriate attribution of prior art I will ease
+this license to a standard FOSS model. Or in time.
 
 • Early implementation. Free to use, copy, modify. MUST give attribution.
 
@@ -20,7 +22,7 @@ Written in standard ISO C11, this subsystem executes natively on the CPU stack, 
 
 ## 🚀 Compilation & Verification Pipeline
 
-The repository includes a comprehensive matrix test suite (`test_inputs.h`) that evaluates origin null states, half-register boundaries, sub-dyadic fractional limits, alternating bit patterns, and explicit Rule 4 phase inversion swaps.
+The repository includes a comprehensive matrix test suite (`test_inputs.h`) that evaluates origin null states, half-register boundaries, sub-dyadic fractional limits, alternating bit patterns, and explicit phase inversion swaps.
 
 To recompile the environment from scratch and print a side-by-side hexadecimal input/output comparison log, execute the following commands in your terminal:
 
@@ -49,12 +51,13 @@ The engine maps all control flags, quality tracking states, and transfinite mult
 
 ## 📄 Documentation
 
-The complete theoretical document outlining the fundamental axioms of the transfinite space, exact rotations of infinity is available inside the repository as a formal preprint document:
+The complete theoretical document outlining the fundamental axioms of the transfinite space, exact rotations of infinity is available inside the repository:
 
 *   **`The_Exponent_Plane_Doc.pdf`** — Mathematical specification Document.
 
 ---
-**Environment Target:** x86_64 Mac native environments / Universal POSIX compliant systems.
+**Environment Target:** Portable ISO C11 / Universal POSIX compliant systems.
+Built on: x86_64 Mac native environments.
 
 [Attribution-NonCommercial-ShareAlike 4.0 International]
 
