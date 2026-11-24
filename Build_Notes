@@ -1,10 +1,28 @@
-Please send feedback, so I can improve this page and we can wrap the function safely, thank you.
+<<<Help Request>>>
+
+TL;DR — One-Shot Fork, Build, Run & Pull Request (gh CLI)
+
+If you have the GitHub CLI (gh) installed on your ARM64 machine, run this single command block to fork the repo, 
+build, run the check, and pop a Pull Request notification straight into cymatic81/The-Exponent-Plane-Code-Base:
+
+bash
+gh repo fork cymatic81/The-Exponent-Plane-Code-Base --clone=true && cd The-Exponent-Plane-Code-Base && \
+[ "$(uname -m)" = "arm64" -o "$(uname -m)" = "aarch64" ] && \
+make install && \
+cd "ARM LSB Check pls run" && \
+clang -std=c11 -O0 -g3 -fno-omit-frame-pointer -Wall -Wextra -I/usr/local/include -L/usr/local/lib -Wl,-rpath,/usr/local/lib LSBmain.c -lmathlib_xplane -o LSBmain_arm64 && \
+./LSBmain_arm64 && \
+git checkout -b arm64-audit && \
+git add -f LSBmain_arm64 truncation_audit.txt && \
+git commit -m "Native ARM64 truncation audit ($(uname -m))" && \
+git push -u origin arm64-audit && \
+gh pr create --repo cymatic81/The-Exponent-Plane-Code-Base --title "Native ARM64 Truncation Audit Results" --body "Built and executed natively on $(uname -m). Attached truncation_audit.txt and LSBmain_arm64."
 
 <<<Lean Wrappers>>>
 
 REX_ABI_INNER_LOCK  and  REX_ABI_WRAPPER_LOCK (from mathlib_xplane.h)
 mathlib_xplane_evaluate REX locked
-wrappers NO inline only, dont use flag -flto (Link-Time Optimization)
+wrappers: NO inline allowed by compiler, dont use flag -flto (Link-Time Optimization)
 Tail call may still be needed.
 
 <<<Saftey Wrapper>>>
@@ -15,7 +33,11 @@ Shear is covered, LSB truncation veryrare or not at all...
 
 Initially looks good. But LSB truncation, chip specific.....PLEASE RUN TEST!
 
-<<<PLEASE RUN ARM CHIPSET LSB TRUNCATION TEST PROVIDED AND PUSH THE RESULT>>>
+<<<<<<<<Perfomance Adaptions>>>>>>>>
+
+Drop in this order: REX_ABI_INNER_LOCK, va_args, enum multi pathing, struct, uint64_t and mask width.
+
+<<<PLEASE RUN ARM CHIPSET LSB TRUNCATION TEST PROVIDED AND PULL REQUEST THE RESULT>>>
 
 Below is suggested by AI  
 

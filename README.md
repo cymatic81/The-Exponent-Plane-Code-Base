@@ -4,9 +4,14 @@ this license to a standard FOSS model. Or in time.
 
 • Early implementation. Free to use, copy, modify. MUST give attribution.
 
-• Two lean friendly wrappers... check build Notes. (use tailcall/NO -flto)
+• Two lean friendly wrappers. Check build Notes. (use tailcall/NO -flto)
 
-• RTFMP. Read the MAN page. See build notes. Please run ARM LSB trunc test, then push.
+• RTFMP. Read the MAN page. See build notes. Please run ARM LSB trunc test, then pull request fork.
+
+• This code as a LSB accurate, discreet 2-adic eval is mathematically valid.
+
+• This code as outlined in "The Exponent Plane" is experimental, speculative,
+non-standard analysys, untested, unverified, unvalidated. Lean code should reflect this.
 
 ---trimmed AI summary---
 
